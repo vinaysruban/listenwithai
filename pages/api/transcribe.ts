@@ -3,8 +3,6 @@ import formidable from "formidable";
 import { Writable, Readable } from "stream";
 import fs, { createReadStream } from "fs";
 import { Configuration, OpenAIApi } from "openai";
-import { exec } from "child_process";
-import streamBuffers from "stream-buffers";
 
 const formidableConfig = {
   keepExtensions: true,
@@ -58,8 +56,8 @@ export default async function handler(
     });
 
     const fileData = Buffer.concat(chunks);
-    fs.writeFileSync("input.wav", fileData);
-    fs.stat("input.wav", (error, stats) => {
+    fs.writeFileSync("tmp/input.wav", fileData);
+    fs.stat("tmp/input.wav", (error, stats) => {
       if (error) {
         console.error(error);
       }
@@ -74,11 +72,11 @@ export default async function handler(
     const openai = new OpenAIApi(configuration);
     const resp = await openai.createTranscription(
       //@ts-ignore
-      createReadStream("input.wav"),
+      createReadStream("tmp/input.wav"),
       "whisper-1"
     );
 
-    fs.unlinkSync('input.wav')
+    fs.unlinkSync('tmp/input.wav')
 
     delete resp.request;
     return res.status(200).json({ resp });
