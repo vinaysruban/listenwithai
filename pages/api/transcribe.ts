@@ -56,8 +56,8 @@ export default async function handler(
     });
 
     const fileData = Buffer.concat(chunks);
-    fs.writeFileSync("/tmp/input.wav", fileData);
-    fs.stat("/tmp/input.wav", (error, stats) => {
+    fs.writeFileSync(`${process.env.TMP_DIR_PATH}/input.wav`, fileData);
+    fs.stat(`${process.env.TMP_DIR_PATH}/input.wav`, (error, stats) => {
       if (error) {
         console.error(error);
       }
@@ -72,10 +72,11 @@ export default async function handler(
     const openai = new OpenAIApi(configuration);
     const resp = await openai.createTranscription(
       //@ts-ignore
-      createReadStream("/tmp/input.wav"),
+      createReadStream(`${process.env.TMP_DIR_PATH}/input.wav`),
       "whisper-1"
     );
 
+    fs.unlinkSync(`${process.env.TMP_DIR_PATH}/input.wav`);
     delete resp.request;
     return res.status(200).json({ resp });
   } catch (err) {
