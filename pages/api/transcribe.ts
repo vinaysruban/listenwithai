@@ -56,8 +56,8 @@ export default async function handler(
     });
 
     const fileData = Buffer.concat(chunks);
-    fs.writeFileSync("tmp/input.wav", fileData);
-    fs.stat("tmp/input.wav", (error, stats) => {
+    fs.writeFileSync("/tmp/input.wav", fileData);
+    fs.stat("/tmp/input.wav", (error, stats) => {
       if (error) {
         console.error(error);
       }
@@ -72,7 +72,7 @@ export default async function handler(
     const openai = new OpenAIApi(configuration);
     const resp = await openai.createTranscription(
       //@ts-ignore
-      createReadStream("tmp/input.wav"),
+      createReadStream("/tmp/input.wav"),
       "whisper-1"
     );
 
