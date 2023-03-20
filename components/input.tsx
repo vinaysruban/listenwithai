@@ -18,8 +18,7 @@ export default function Input() {
   const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setStatus("upload");
-      const file = e.target.files[0];
-
+      const file: File = e.target.files[0];
 
       const data = new FormData();
       data.append("file", file);
@@ -50,7 +49,6 @@ export default function Input() {
     }
 
     const data = await res.json()
-    console.log(data)
     const text = data.resp.data.text
 
     try {

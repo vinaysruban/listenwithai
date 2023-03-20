@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
 import formidable from "formidable";
-import { Writable } from "stream";
+import { Writable, Readable } from "stream";
 import fs, { createReadStream } from "fs";
 import { Configuration, OpenAIApi } from "openai";
 import { exec } from "child_process";
+import streamBuffers from "stream-buffers";
 
 const formidableConfig = {
   keepExtensions: true,
@@ -67,16 +68,17 @@ export default async function handler(
       }
     });
 
-    const hello = createReadStream("input.wav")
-    console.log(fileData.toString('utf8'))
     const configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY,
     });
     const openai = new OpenAIApi(configuration);
-    const resp = await openai.createTranscription( //@ts-ignore
+    const resp = await openai.createTranscription(
+      //@ts-ignore
       createReadStream("input.wav"),
-      "whisper-1",
+      "whisper-1"
     );
+
+    fs.unlinkSync('input.wav')
 
     delete resp.request;
     return res.status(200).json({ resp });

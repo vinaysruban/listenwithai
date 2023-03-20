@@ -16,6 +16,8 @@ export default function Output({
 
   useEffect(() => {
     setDisplayText("");
+    setIndex(1);
+    setGap(500);
   }, [text]);
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function Output({
           : status === "load"
           ? <span>We&apos;re generating it right now ✍</span>
           : status === "reject"
-          ? <span><b>An error occured.</b><br />The most likely scenario is that you need to give more audio 👂.<br />Otherwise, you may have uploaded a file with an extension <i>that is not ❌</i> <code>.mp3</code>, <code>.wav</code>, <code>.m4a</code> or another format that we recognise.<br />Please convert it into one of these using an online converter (inbuilt converter coming soon).</span>
+          ? <span><b>An error occured.</b><br />The most likely scenario is that you need to give more audio 👂, or otherwise you need to split your audio into chunks and give it to us as we can&apos;t handle it all at once.<br />Otherwise, you may have uploaded a file with an extension <i>that is not ❌</i> <code>.mp3</code>, <code>.wav</code>, <code>.m4a</code> or another format that we recognise.<br />Please convert it into one of these using an online converter (inbuilt converter coming soon).</span>
           : <span onClick={() => {navigator.clipboard.writeText(splitText[0] + displayText)}}>{splitText[0] + displayText}</span>}
       </p>
       <button
