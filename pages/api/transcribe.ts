@@ -76,8 +76,6 @@ export default async function handler(
       "whisper-1"
     );
 
-    fs.unlinkSync('tmp/input.wav')
-
     delete resp.request;
     return res.status(200).json({ resp });
   } catch (err) {
