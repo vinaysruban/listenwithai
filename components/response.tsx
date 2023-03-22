@@ -11,7 +11,6 @@ export default function Response({
   const [displayText, setDisplayText] = useState("");
   const [index, setIndex] = useState(-1);
   const [gap, setGap] = useState<number>(500);
-
   const splitText = text.split(" ");
 
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function Response({
       </p>
       <button
         role="button"
-        className="bg-slate-900 text-white font-semibold py-2 px-4 rounded"
+        className="bg-slate-900 text-white font-semibold py-2 px-4 rounded-2xl"
         onClick={() => setGap(50)}
       >
         Speed Up

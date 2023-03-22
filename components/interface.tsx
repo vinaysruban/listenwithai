@@ -2,13 +2,7 @@
 import { ChangeEvent, useState } from "react";
 import Response from "./response";
 
-type Status =
-  | "idle"
-  | "upload"
-  | "ready"
-  | "load"
-  | "reject"
-  | "complete";
+type Status = "idle" | "upload" | "ready" | "load" | "reject" | "complete";
 
 export default function Interface() {
   const [formData, setFormData] = useState<FormData>(new FormData());
@@ -29,21 +23,21 @@ export default function Interface() {
 
   const sendAudio = async () => {
     setStatus("load");
-    console.time("apicall")
+    console.time("apicall");
     const res = await fetch("api/transcribe", {
       method: "POST",
       body: formData,
     });
-    console.timeEnd("apicall")
+    console.timeEnd("apicall");
 
     if (!res.ok) {
       setStatus("reject");
-      console.log('uh oh')
+      console.log("uh oh");
       return;
     }
 
-    const data = await res.json()
-    const text = data.resp.data.text
+    const data = await res.json();
+    const text = data.resp.data.text;
 
     try {
       text.split(" ");
@@ -57,14 +51,18 @@ export default function Interface() {
 
   return (
     <>
+      <label htmlFor="file" className="mt-2 text-slate-800 font-medium">
+        The file goes in here 👇
+      </label>
       <input
         className="my-4"
         type="file"
+        name="file"
         accept="audio/*"
         onChange={handleFile}
       />
       <button
-        className="my-2 w-1/5 mx-auto border-2 border-slate-900 rounded-2xl px-2 py-1 text-slate-900 hover:bg-slate-900 hover:text-slate-300 transition-all"
+        className="my-2 mx-auto border-2 border-slate-900 rounded-2xl px-12 py-1 text-slate-900 hover:bg-slate-900 hover:text-slate-300 transition-all"
         onClick={sendAudio}
       >
         Send Audio
