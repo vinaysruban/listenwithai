@@ -4,6 +4,15 @@ import { Writable, Readable } from "stream";
 import fs, { createReadStream } from "fs";
 import { Configuration, OpenAIApi } from "openai";
 
+function getRandomInt(max: number) {
+  return [...Array(max)].map(_=>Math.random()*10|0).join(``);
+}
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
 const formidableConfig = {
   keepExtensions: true,
   maxFileSize: 10_000_000_000_000_000_000_000,
@@ -55,28 +64,17 @@ export default async function handler(
       fileWriteStreamHandler: () => fileConsumer(chunks),
     });
 
+    const fileName = getRandomInt(256)
     const fileData = Buffer.concat(chunks);
-    fs.writeFileSync(`${process.env.TMP_DIR_PATH}/input.wav`, fileData);
-    fs.stat(`${process.env.TMP_DIR_PATH}/input.wav`, (error, stats) => {
-      if (error) {
-        console.error(error);
-      }
-      if (stats.size >= 11557458) {
-        return res.status(500).json({ error: "File too large" });
-      }
-    });
+    fs.writeFileSync(`${process.env.TMP_DIR_PATH}/${fileName}.wav`, fileData);
 
-    const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
     const resp = await openai.createTranscription(
       //@ts-ignore
-      createReadStream(`${process.env.TMP_DIR_PATH}/input.wav`),
+      createReadStream(`${process.env.TMP_DIR_PATH}/${fileName}.wav`),
       "whisper-1"
     );
 
-    fs.unlinkSync(`${process.env.TMP_DIR_PATH}/input.wav`);
+    fs.unlinkSync(`${process.env.TMP_DIR_PATH}/${fileName}.wav`);
     delete resp.request;
     return res.status(200).json({ resp });
   } catch (err) {
