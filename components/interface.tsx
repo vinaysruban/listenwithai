@@ -1,6 +1,6 @@
 "use client";
 import { ChangeEvent, useState } from "react";
-import Output from "./output";
+import Response from "./response";
 
 type Status =
   | "idle"
@@ -10,7 +10,7 @@ type Status =
   | "reject"
   | "complete";
 
-export default function Input() {
+export default function Interface() {
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [convertedText, setConvertedText] = useState<string>("");
   const [status, setStatus] = useState<Status>("idle");
@@ -69,7 +69,7 @@ export default function Input() {
       >
         Send Audio
       </button>
-      <Output text={convertedText} status={status} />
+      <Response text={convertedText} status={status} />
     </>
   );
 }

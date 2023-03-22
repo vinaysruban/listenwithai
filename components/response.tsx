@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function Output({
+export default function Response({
   text,
   status,
 }: {
