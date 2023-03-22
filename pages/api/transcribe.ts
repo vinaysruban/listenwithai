@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
 import formidable from "formidable";
-import { Writable, Readable } from "stream";
-import fs, { createReadStream } from "fs";
+import { Writable } from "stream";
+import fs from "fs";
 import { Configuration, OpenAIApi } from "openai";
 
 function getRandomInt(max: number) {
@@ -70,7 +70,7 @@ export default async function handler(
 
     const resp = await openai.createTranscription(
       //@ts-ignore
-      createReadStream(`${process.env.TMP_DIR_PATH}/${fileName}.wav`),
+      fs.createReadStream(`${process.env.TMP_DIR_PATH}/${fileName}.wav`),
       "whisper-1"
     );
 

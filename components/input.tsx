@@ -23,12 +23,6 @@ export default function Input() {
       const data = new FormData();
       data.append("file", file);
       setFormData(data);
-
-      if (file.size > 25 * 1024 * 1024) {
-        alert("Please upload an audio file less than 25MB");
-        setStatus("reject")
-        return;
-      }
       setStatus("ready");
     }
   };
