@@ -64,7 +64,7 @@ export default async function handler(
       fileWriteStreamHandler: () => fileConsumer(chunks),
     });
 
-    const fileName = getRandomInt(256)
+    const fileName = getRandomInt(8)
     const fileData = Buffer.concat(chunks);
     fs.writeFileSync(`${process.env.TMP_DIR_PATH}/${fileName}.wav`, fileData);
 
