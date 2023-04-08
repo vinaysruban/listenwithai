@@ -5,7 +5,7 @@ import fs from "fs";
 import { Configuration, OpenAIApi } from "openai";
 
 function getRandomInt(max: number) {
-  return [...Array(max)].map(_=>Math.random()*10|0).join(``);
+  return [...Array(max)].map((_) => (Math.random() * 10) | 0).join(``);
 }
 
 const configuration = new Configuration({
@@ -60,13 +60,14 @@ export default async function handler(
 
     const { fields, files } = await formidablePromise(req, {
       ...formidableConfig,
-      // consume this, otherwise formidable tries to save the file to disk
       fileWriteStreamHandler: () => fileConsumer(chunks),
     });
 
-    const fileName = getRandomInt(8)
-    const fileData = Buffer.concat(chunks);
+    const fileName = getRandomInt(8);
+    const fileData = Buffer.concat(chunks); //@ts-ignore
     fs.writeFileSync(`${process.env.TMP_DIR_PATH}/${fileName}.wav`, fileData);
+    console.log(fileData)
+    console.log(fs.createReadStream(`${process.env.TMP_DIR_PATH}/${fileName}.wav`))
 
     const resp = await openai.createTranscription(
       //@ts-ignore

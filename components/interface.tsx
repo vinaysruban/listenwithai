@@ -4,6 +4,16 @@ import Response from "./response";
 
 type Status = "idle" | "upload" | "ready" | "load" | "reject" | "complete";
 
+type Data = {
+  resp: {
+    data: {
+      text: string;
+    };
+    status: number;
+    statusText: string;
+  };
+};
+
 export default function Interface() {
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [convertedText, setConvertedText] = useState<string>("");
@@ -32,21 +42,18 @@ export default function Interface() {
 
     if (!res.ok) {
       setStatus("reject");
-      console.log("uh oh");
       return;
     }
 
-    const data = await res.json();
-    const text = data.resp.data.text;
+    const data: Data = await res.json();
+    console.log(data);
 
-    try {
-      text.split(" ");
-    } catch (err) {
+    if (!data.resp.data.text) {
       setStatus("reject");
       return;
     }
+    setConvertedText(data.resp.data.text);
     setStatus("complete");
-    setConvertedText(text);
   };
 
   return (

@@ -1,4 +1,5 @@
 import "./globals.css";
+import Interface from "@/components/interface";
 import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
@@ -16,7 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <main>
+          <section className="flex flex-col place-items-center">
+            {children}
+            <Interface />
+          </section>
+        </main>
         <Analytics />
       </body>
     </html>
